@@ -5,7 +5,9 @@ const SETTINGS_STORAGE_KEY = 'prospector_settings';
 
 const DEFAULT_SETTINGS: AppSettings = {
   geminiApiKey: '',
+  geminiModel: 'gemini-1.5-flash',
   openaiApiKey: '',
+  openaiModel: 'gpt-4o-mini',
   preferredProvider: 'gemini',
   leadsPerSearch: 10,
   kanbanColumns: ['Novo', 'Contactado', 'Proposta Enviada', 'Em Negociação', 'Fechado'],

@@ -53,52 +53,79 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ settings, onSave, onClose
         <div className="space-y-6">
           {/* API Keys */}
           <section>
-            <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">API Keys</h3>
+            <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Provedor e API Keys</h3>
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm text-gray-300 mb-1">Gemini API Key</label>
-                <input
-                  type="password"
-                  value={localSettings.geminiApiKey}
-                  onChange={(e) => setLocalSettings({ ...localSettings, geminiApiKey: e.target.value })}
-                  placeholder="Insira sua chave do Google AI Studio"
-                  className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-300 mb-1">OpenAI API Key (Opcional)</label>
-                <input
-                  type="password"
-                  value={localSettings.openaiApiKey || ''}
-                  onChange={(e) => setLocalSettings({ ...localSettings, openaiApiKey: e.target.value })}
-                  placeholder="Insira sua chave da OpenAI"
-                  className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
-                />
-              </div>
-              <div className="flex items-center space-x-4">
-                  <span className="text-sm text-gray-300">Provedor Preferencial:</span>
+              <div className="flex items-center space-x-6 p-3 bg-gray-700/30 rounded-lg">
                   <label className="flex items-center space-x-2 text-sm cursor-pointer">
                       <input 
                         type="radio" 
                         name="provider" 
                         checked={localSettings.preferredProvider === 'gemini'} 
                         onChange={() => setLocalSettings({...localSettings, preferredProvider: 'gemini'})}
-                        className="text-blue-500 focus:ring-blue-500"
+                        className="text-blue-500 focus:ring-blue-500 w-4 h-4"
                       />
-                      <span>Gemini</span>
+                      <span className={localSettings.preferredProvider === 'gemini' ? "text-white font-bold" : "text-gray-400"}>Google Gemini</span>
                   </label>
-                  <label className="flex items-center space-x-2 text-sm cursor-pointer opacity-50">
+                  <label className="flex items-center space-x-2 text-sm cursor-pointer">
                       <input 
                         type="radio" 
                         name="provider" 
-                        disabled
                         checked={localSettings.preferredProvider === 'openai'} 
                         onChange={() => setLocalSettings({...localSettings, preferredProvider: 'openai'})}
-                        className="text-blue-500 focus:ring-blue-500"
+                        className="text-blue-500 focus:ring-blue-500 w-4 h-4"
                       />
-                      <span>OpenAI (Em breve)</span>
+                      <span className={localSettings.preferredProvider === 'openai' ? "text-white font-bold" : "text-gray-400"}>OpenAI</span>
                   </label>
               </div>
+
+              {localSettings.preferredProvider === 'gemini' ? (
+                <div className="space-y-4 animate-in slide-in-from-left-2 duration-200">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1 uppercase">Gemini API Key</label>
+                    <input
+                      type="password"
+                      value={localSettings.geminiApiKey}
+                      onChange={(e) => setLocalSettings({ ...localSettings, geminiApiKey: e.target.value })}
+                      placeholder="Chave do Google AI Studio"
+                      className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1 uppercase">Modelo Gemini</label>
+                    <select
+                      value={localSettings.geminiModel}
+                      onChange={(e) => setLocalSettings({ ...localSettings, geminiModel: e.target.value as any })}
+                      className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                    >
+                      <option value="gemini-2.0-flash">Gemini 2.0 Flash (Mais rápido e novo)</option>
+                      <option value="gemini-1.5-flash">Gemini 1.5 Flash (Mais estável / Maior quota)</option>
+                    </select>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4 animate-in slide-in-from-right-2 duration-200">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1 uppercase">OpenAI API Key</label>
+                    <input
+                      type="password"
+                      value={localSettings.openaiApiKey || ''}
+                      onChange={(e) => setLocalSettings({ ...localSettings, openaiApiKey: e.target.value })}
+                      placeholder="sk-..."
+                      className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1 uppercase">Modelo OpenAI</label>
+                    <input
+                      type="text"
+                      value={localSettings.openaiModel || 'gpt-4o-mini'}
+                      onChange={(e) => setLocalSettings({ ...localSettings, openaiModel: e.target.value })}
+                      placeholder="gpt-4o-mini"
+                      className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </section>
 

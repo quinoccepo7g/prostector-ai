@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { Lead } from "../types";
+import { Lead, AppSettings } from "../types";
 
 // Helper to extract JSON from markdown code block
 const extractJson = (text: string): any[] => {
@@ -34,22 +34,11 @@ const extractJson = (text: string): any[] => {
 export const findLeads = async (
   businessType: string,
   location: string,
-  apiKey: string,
-  limit: number = 10
+  settings: AppSettings
 ): Promise<Omit<Lead, 'id' | 'status'>[]> => {
-  if (!apiKey) {
-    throw new Error("API Key não configurada. Vá em Configurações para adicionar.");
-  }
+  const { preferredProvider, geminiApiKey, openaiApiKey, leadsPerSearch, geminiModel, openaiModel } = settings;
+  const limit = leadsPerSearch || 10;
 
-  const ai = new GoogleGenAI({ 
-    apiKey: apiKey,
-    httpOptions: {
-      headers: {
-        'User-Agent': 'aistudio-build',
-      }
-    }
-  });
-  
   const prompt = `
     Encontre exatamente ${limit} leads de negócios do tipo "${businessType}" localizados em "${location}".
     Use a busca na web para encontrar informações detalhadas de contato para cada lead.
@@ -80,28 +69,69 @@ export const findLeads = async (
     \`\`\`
   `;
 
-  try {
-    const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
-      contents: prompt,
-      config: {
-        tools: [{ googleSearch: {} } as any],
+  if (preferredProvider === 'openai') {
+    if (!openaiApiKey) throw new Error("API Key da OpenAI não configurada.");
+    
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${openaiApiKey}`
+        },
+        body: JSON.stringify({
+          model: openaiModel || 'gpt-4o-mini',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.7
+        })
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error?.message || `Erro OpenAI: ${response.status}`);
       }
+
+      const data = await response.json();
+      const text = data.choices[0].message.content;
+      const leadsData = extractJson(text);
+      return Array.isArray(leadsData) ? leadsData.slice(0, limit) : [];
+    } catch (error: any) {
+      console.error("OpenAI Error:", error);
+      throw new Error("Erro na OpenAI: " + error.message);
+    }
+  }
+
+  // Gemini logic
+  if (!geminiApiKey) {
+    throw new Error("API Key do Gemini não configurada.");
+  }
+
+  const client = new GoogleGenAI({
+    apiKey: geminiApiKey,
+  });
+
+  try {
+    const response = await client.models.generateContent({
+      model: geminiModel || "gemini-1.5-flash",
+      contents: prompt,
     });
     
     const text = response.text || "";
-    const leadsData = extractJson(text.trim());
+    const leadsData = extractJson(text);
 
     if (Array.isArray(leadsData)) {
         return leadsData.filter(lead => lead.companyName && lead.address).slice(0, limit);
     }
-    
     return [];
 
   } catch (error: any) {
     console.error("Error finding leads:", error);
-    if (error.message?.includes("API_KEY_INVALID") || error.message?.includes("API key not valid")) {
-        throw new Error("Chave de API do Gemini inválida. Verifique em Configurações.");
+    const msg = error.message || "";
+    if (msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED")) {
+        throw new Error("Limite de quota atingido no Gemini. Tente usar o modelo 1.5-flash ou configure a API da OpenAI nas configurações.");
+    }
+    if (msg.includes("API_KEY_INVALID")) {
+        throw new Error("Chave de API do Gemini inválida.");
     }
     throw new Error("Falha ao buscar leads: " + (error.message || "Erro desconhecido"));
   }

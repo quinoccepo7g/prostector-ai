@@ -2,7 +2,9 @@ export type KanbanStatus = string;
 
 export interface AppSettings {
   geminiApiKey: string;
+  geminiModel: 'gemini-2.0-flash' | 'gemini-1.5-flash';
   openaiApiKey?: string;
+  openaiModel?: string;
   preferredProvider: 'gemini' | 'openai';
   leadsPerSearch: number;
   kanbanColumns: string[];

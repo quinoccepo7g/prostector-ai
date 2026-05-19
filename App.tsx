@@ -43,8 +43,7 @@ function App() {
       const foundLeads = await findLeads(
         businessType, 
         location, 
-        settings.geminiApiKey, 
-        settings.leadsPerSearch
+        settings
       );
       const newLeads: Lead[] = foundLeads.map((lead, index) => ({
         ...lead,
