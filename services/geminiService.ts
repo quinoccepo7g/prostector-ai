@@ -108,30 +108,43 @@ export const findLeads = async (
 
   const client = new GoogleGenAI({
     apiKey: geminiApiKey,
+    httpOptions: {
+      headers: {
+        'User-Agent': 'aistudio-build',
+      }
+    }
   });
 
   try {
-    const response = await client.models.generateContent({
-      model: geminiModel || "gemini-1.5-flash",
+    const model = settings.geminiModel || "gemini-3.1-flash-lite";
+    const response = await (client as any).models.generateContent({
+      model: model,
       contents: prompt,
+      config: {
+        tools: [{ googleSearch: {} }],
+      }
     });
     
     const text = response.text || "";
     const leadsData = extractJson(text);
 
     if (Array.isArray(leadsData)) {
-        return leadsData.filter(lead => lead.companyName && lead.address).slice(0, limit);
+        return leadsData.filter((lead: any) => lead.companyName && lead.address).slice(0, limit);
     }
     return [];
 
   } catch (error: any) {
     console.error("Error finding leads:", error);
     const msg = error.message || "";
+    
     if (msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED")) {
-        throw new Error("Limite de quota atingido no Gemini. Tente usar o modelo 1.5-flash ou configure a API da OpenAI nas configurações.");
+        throw new Error("Limite de quota atingido no Gemini. Como você está usando a versão gratuita, aguarde alguns segundos ou use a API da OpenAI. Se o erro persistir, verifique seu faturamento no Google AI Studio.");
+    }
+    if (msg.includes("404") || msg.includes("not found")) {
+        throw new Error(`Modelo "${settings.geminiModel}" não encontrado ou não suportado nesta região. Experimente o "Gemini 3.1 Flash Lite" nas configurações.`);
     }
     if (msg.includes("API_KEY_INVALID")) {
-        throw new Error("Chave de API do Gemini inválida.");
+        throw new Error("Chave de API do Gemini inválida. Verifique em Configurações.");
     }
     throw new Error("Falha ao buscar leads: " + (error.message || "Erro desconhecido"));
   }

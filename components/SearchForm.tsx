@@ -27,10 +27,10 @@ const SearchForm: React.FC<SearchFormProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-3xl mx-auto">
+    <form onSubmit={handleSubmit} className="bg-gray-800 p-4 sm:p-6 rounded-xl shadow-lg w-full max-w-3xl mx-auto border border-gray-700/50">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="businessType" className="block text-sm font-medium text-gray-300 mb-1">
+          <label htmlFor="businessType" className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5 ml-1">
             Tipo de Negócio
           </label>
           <input
@@ -39,12 +39,12 @@ const SearchForm: React.FC<SearchFormProps> = ({
             value={businessType}
             onChange={(e) => setBusinessType(e.target.value)}
             placeholder="Ex: Restaurante italiano"
-            className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+            className="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-white placeholder:text-gray-600 transition-all"
             required
           />
         </div>
         <div>
-          <label htmlFor="location" className="block text-sm font-medium text-gray-300 mb-1">
+          <label htmlFor="location" className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5 ml-1">
             Localização
           </label>
           <input
@@ -53,7 +53,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="Ex: São Paulo, SP"
-            className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+            className="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-white placeholder:text-gray-600 transition-all"
             required
           />
         </div>
@@ -62,7 +62,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition duration-300 disabled:bg-blue-800 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-all shadow-lg shadow-blue-900/20 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
         >
           {isLoading ? (
             <>

@@ -95,21 +95,24 @@ function App() {
 
   return (
     <div className="bg-gray-900 min-h-screen text-white font-sans">
-      <header className="py-8 relative">
+      <header className="py-6 sm:py-8 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="absolute right-4 top-8 sm:right-6 lg:right-8">
-            <button 
-              onClick={() => setIsSettingsOpen(true)}
-              className="p-2 bg-gray-800 hover:bg-gray-700 rounded-full transition-colors text-gray-400 hover:text-white border border-gray-700"
-              title="Configurações"
-            >
-              <SettingsIcon />
-            </button>
+          <div className="flex justify-between items-center sm:block">
+            <div className="sm:absolute sm:right-4 sm:top-8 lg:right-8">
+              <button 
+                onClick={() => setIsSettingsOpen(true)}
+                className="p-2 bg-gray-800 hover:bg-gray-700 rounded-full transition-colors text-gray-400 hover:text-white border border-gray-700 shadow-md"
+                title="Configurações"
+              >
+                <SettingsIcon />
+              </button>
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 flex-1">
+              Prospector AI
+            </h1>
+            <div className="w-10 sm:hidden"></div> {/* Spacer for symmetry on mobile */}
           </div>
-          <h1 className="text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-            Prospector AI
-          </h1>
-          <p className="mt-2 text-center text-gray-400 max-w-2xl mx-auto">
+          <p className="mt-4 text-center text-gray-400 max-w-2xl mx-auto text-sm sm:text-base px-2">
             Encontre e gerencie leads instantaneamente com o poder da IA. Salve seu progresso e organize seu funil de vendas.
           </p>
         </div>

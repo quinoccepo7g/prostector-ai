@@ -5,7 +5,7 @@ const SETTINGS_STORAGE_KEY = 'prospector_settings';
 
 const DEFAULT_SETTINGS: AppSettings = {
   geminiApiKey: '',
-  geminiModel: 'gemini-1.5-flash',
+  geminiModel: 'gemini-3.1-flash-lite',
   openaiApiKey: '',
   openaiModel: 'gpt-4o-mini',
   preferredProvider: 'gemini',

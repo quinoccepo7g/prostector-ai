@@ -62,47 +62,52 @@ const LeadDetailModal: React.FC<LeadDetailModalProps> = ({ lead, columns, onClos
 
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 rounded-xl shadow-2xl p-8 w-full max-w-lg text-white relative max-h-[90vh] overflow-y-auto">
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4 animate-in fade-in duration-200">
+      <div className="bg-gray-800 rounded-2xl shadow-2xl p-5 sm:p-8 w-full max-w-lg text-white relative max-h-[95vh] overflow-y-auto border border-gray-700/50">
+        <button 
+          onClick={onClose} 
+          className="absolute top-4 right-4 p-2 bg-gray-900/50 hover:bg-gray-700 rounded-full text-gray-400 hover:text-white transition-all z-10"
+        >
           <XIcon />
         </button>
 
-        <h2 className="text-3xl font-bold mb-1">{lead.companyName}</h2>
-        <p className="text-gray-400 mb-6">{lead.contactName || 'Contato não especificado'}</p>
+        <div className="pr-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-1 leading-tight">{lead.companyName}</h2>
+            <p className="text-gray-400 mb-6 text-sm sm:text-base font-medium">{lead.contactName || 'Contato não especificado'}</p>
+        </div>
         
         <div className="space-y-4">
-            <InfoRow icon={<LocationMarkerIcon />}>
-                <span>{lead.address}</span>
+            <InfoRow icon={<LocationMarkerIcon className="text-blue-400" />}>
+                <span className="text-sm sm:text-base">{lead.address}</span>
             </InfoRow>
             {lead.phone && (
-                 <InfoRow icon={<PhoneIcon />} href={`tel:${cleanPhoneNumber(lead.phone)}`}>
-                    <span>{lead.phone}</span>
+                 <InfoRow icon={<PhoneIcon className="text-green-400" />} href={`tel:${cleanPhoneNumber(lead.phone)}`}>
+                    <span className="text-sm sm:text-base">{lead.phone}</span>
                 </InfoRow>
             )}
              {lead.whatsapp && (
-                 <InfoRow icon={<WhatsappIcon />} href={`https://wa.me/${cleanPhoneNumber(lead.whatsapp)}`}>
-                    <span>{lead.whatsapp}</span>
+                 <InfoRow icon={<WhatsappIcon className="text-emerald-400" />} href={`https://wa.me/${cleanPhoneNumber(lead.whatsapp)}`}>
+                    <span className="text-sm sm:text-base">{lead.whatsapp}</span>
                 </InfoRow>
             )}
             {lead.email && (
-                <InfoRow icon={<MailIcon />} href={`mailto:${lead.email}`}>
-                    <span>{lead.email}</span>
+                <InfoRow icon={<MailIcon className="text-purple-400" />} href={`mailto:${lead.email}`}>
+                    <span className="text-sm sm:text-base break-all">{lead.email}</span>
                 </InfoRow>
             )}
             {lead.website && (
-                <InfoRow icon={<GlobeIcon />} href={ensureHttps(lead.website)}>
-                    <span className="truncate">{lead.website}</span>
+                <InfoRow icon={<GlobeIcon className="text-cyan-400" />} href={ensureHttps(lead.website)}>
+                    <span className="truncate text-sm sm:text-base">{lead.website}</span>
                 </InfoRow>
             )}
             {lead.instagram && (
-                <InfoRow icon={<InstagramIcon />} href={ensureHttps(lead.instagram)}>
-                    <span className="truncate">{lead.instagram.split('/').pop() || lead.instagram}</span>
+                <InfoRow icon={<InstagramIcon className="text-pink-400" />} href={ensureHttps(lead.instagram)}>
+                    <span className="truncate text-sm sm:text-base">{lead.instagram.split('/').pop() || lead.instagram}</span>
                 </InfoRow>
             )}
             {lead.facebook && (
-                 <InfoRow icon={<FacebookIcon />} href={ensureHttps(lead.facebook)}>
-                    <span className="truncate">{lead.facebook.split('/').pop() || lead.facebook}</span>
+                 <InfoRow icon={<FacebookIcon className="text-blue-600" />} href={ensureHttps(lead.facebook)}>
+                    <span className="truncate text-sm sm:text-base">{lead.facebook.split('/').pop() || lead.facebook}</span>
                 </InfoRow>
             )}
         </div>

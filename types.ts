@@ -2,7 +2,7 @@ export type KanbanStatus = string;
 
 export interface AppSettings {
   geminiApiKey: string;
-  geminiModel: 'gemini-2.0-flash' | 'gemini-1.5-flash';
+  geminiModel: 'gemini-3.1-flash-lite' | 'gemini-3-flash-preview' | 'gemini-flash-latest';
   openaiApiKey?: string;
   openaiModel?: string;
   preferredProvider: 'gemini' | 'openai';
