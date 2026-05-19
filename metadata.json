@@ -1,0 +1,8 @@
+{
+  "name": "Prospector AI",
+  "description": "An intelligent lead prospecting application that leverages Google Maps and Google Search through the Gemini API to find detailed business information.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": []
+}
