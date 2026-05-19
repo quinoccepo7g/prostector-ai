@@ -73,17 +73,24 @@ async function startServer() {
         return res.status(400).json({ error: "API Key do Gemini não configurada." });
       }
 
-      const genAI = new GoogleGenAI(geminiKey);
+      const genAI = new GoogleGenAI({ 
+        apiKey: geminiKey,
+        httpOptions: {
+          headers: {
+            'User-Agent': 'aistudio-build',
+          }
+        }
+      });
       
-      // Use standard SDK method
-      const modelInstance = genAI.getGenerativeModel({ 
+      const response = await genAI.models.generateContent({ 
         model: model,
-        tools: [{ googleSearch: {} }] as any
+        contents: prompt,
+        config: {
+          tools: [{ googleSearch: {} }]
+        }
       });
 
-      const result = await modelInstance.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
+      const text = response.text || "";
 
       return res.json({ success: true, text });
 
@@ -95,7 +102,12 @@ async function startServer() {
 
       if (errorMessage.includes("429") || errorMessage.includes("RESOURCE_EXHAUSTED")) {
         statusCode = 429;
-        errorMessage = "Limite de quota atingido. Aguarde alguns segundos ou use outra API Key.";
+        errorMessage = "Limite de quota atingido no Gemini. Aguarde alguns segundos ou mude para o modelo 'Flash Lite' nas configurações.";
+      }
+
+      if (errorMessage.includes("404") || errorMessage.includes("not found")) {
+        statusCode = 404;
+        errorMessage = `O modelo '${model}' não foi encontrado ou não é suportado nesta região. Tente o 'Gemini 3.1 Flash Lite' nas configurações.`;
       }
 
       res.status(statusCode).json({ error: errorMessage });

@@ -107,8 +107,9 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ settings, onSave, onClose
                       className="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-2.5 px-4 text-white focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
                     >
                       <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash Lite (Grátis e Rápido)</option>
-                      <option value="gemini-3-flash-preview">Gemini 3 Flash (Padrão)</option>
-                      <option value="gemini-flash-latest">Gemini 2.0 Flash (Última versão)</option>
+                      <option value="gemini-3-flash-preview">Gemini 3 Flash (Novo)</option>
+                      <option value="gemini-flash-latest">Gemini 2.0 Flash (Mais rápido)</option>
+                      <option value="gemini-1.5-flash">Gemini 1.5 Flash (Estável/Legado)</option>
                     </select>
                   </div>
                 </div>

@@ -1,4 +1,3 @@
-import { GoogleGenAI } from "@google/genai";
 import { Lead, AppSettings } from "../types";
 
 // Helper to extract JSON from markdown code block
